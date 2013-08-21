@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=python /home/slug/Projector/pS.py OFF
+Name=Turn Off Projector
+Icon=/home/slug/Projector/off.svg

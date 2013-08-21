@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=python /home/slug/Projector/pS.py DVI
+Name=INPUT: Laptop (DVI)
+Icon=/home/slug/Projector/dvi.png

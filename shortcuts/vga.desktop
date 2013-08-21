@@ -1,0 +1,8 @@
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=python /home/slug/Projector/pS.py RGB2
+Name=INPUT: Laptop (VGA)
+Icon=/home/slug/Projector/vga.png

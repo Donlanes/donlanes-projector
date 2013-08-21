@@ -1,0 +1,8 @@
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=python /home/slug/Projector/pS.py RGB1
+Name=INPUT: Donlanes (This Computer)
+Icon=/home/slug/Projector/computer.svg

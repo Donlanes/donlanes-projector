@@ -1,0 +1,8 @@
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=python /home/slug/Projector/pS.py VIDEO
+Name=INPUT: RCA (Video games or TV/VCR)
+Icon=/home/slug/Projector/rca.svg
