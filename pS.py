@@ -24,7 +24,7 @@ COMMANDS = {
 
 
 
-def sevlev_mail():
+def send_sevlev_mail():
 	print "sending 711 email"
 	import smtplib, string, time
 
@@ -120,7 +120,16 @@ def no_projector_message():
 	Message(root, text="**ALERT** \n \n The USB cable to the projector may be unplugged or need to be reset.  Please unplug the 'BLUE' USB cable from the back of donlanes (This computer) and plug it back in.\n \n Thank you", bg='black',fg='white', relief=GROOVE).pack(padx=30, pady=10)
 	root.mainloop()
 
+def get_last_email_sent_time():
+	try:
+		with open('last_sent_time', 'r') as f:
+			return int(f.read())
+	except IOError:
+	   return 0
 
+def save_last_email_sent_time():
+	with open('last_sent_time', 'w') as f:
+		f.write(str(int(time.time())))
 
 def main():
 	desc = "Control the lounge NEC projector"
@@ -150,14 +159,18 @@ def main():
 			time.sleep(.5)
 			if(l.inWaiting()):
 				res = l.readline()
-				print res
 				file.write('711.recv.{}\n'.format(res[0]))
 
 				if (res[0] == '7'):
-					file.write('711.mail.sending\n')
-					sevlev_mail()
+					SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
+					if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:
+						file.write('711.mail.sending\n')
+						send_sevlev_mail()
+						save_last_email_sent_time()
+					else:
+						file.write('711.mail.ignoring\n')
 		if (command == '711-force'):
-			sevlev_mail()
+			send_sevlev_mail()
 
 	if (COMMANDS.has_key(command)):
 		s = serial.Serial(port=port,baudrate=baudrate)
