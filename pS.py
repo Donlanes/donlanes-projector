@@ -92,12 +92,14 @@ def sevlev_mail():
 #
 #		 "subject": "[7-eleven] Now, Goodale (" + str(int(time.mktime(time.gmtime()))) + ") <eom>",
 
+	time_str = time.strftime("%Y-%m-%d %I:%M %p", time.localtime())
+
 	msg = {
 		"host": "outgoing.mit.edu",
-		"subject": "[7-eleven] Now, Goodale <eom>",
+		"subject": "[7-eleven] Sevlev! Leaving from Goodale",
 		"from": "711-button@mit.edu",
 		"to": ["7-eleven@mit.edu"],
-		"body": "",
+		"body": time_str + "\nAdd or remove yourself: https://groups.mit.edu/webmoira/list/7-eleven",
 	}
 
 	msg_raw = string.join((
