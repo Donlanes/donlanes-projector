@@ -136,9 +136,9 @@ def main():
 		l = serial.Serial(port=light_controller, baudrate=baudrate)
 		time.sleep(.5)
 		if command == 'ON' :
-		        l.write('1')
+				l.write('1')
 		elif command == 'OFF' :
-		      l.write('0')
+			  l.write('0')
 		elif command == '711':
 			# file = open('/home/slug/Projector/log.log', 'w')
 			# file.write('711.check\n')
@@ -151,10 +151,10 @@ def main():
 				print res
 				if (res[0] == '7'):
 					# sevlev_mail()
-                                        pass
-                if(command == '711-force'):
-                        # sevlev_mail()
-                        pass
+					pass
+				if (command == '711-force'):
+					# sevlev_mail()
+					pass
 
 	if (COMMANDS.has_key(command)):
 		s = serial.Serial(port=port,baudrate=baudrate)
