@@ -34,23 +34,23 @@ def sevlev_mail():
 #
 #	# check to see when the last time the button was pressed
 #	lastTime = os.path.getmtime('/home/slug/Projector/sevenElevenTouch')
-#	
+#
 #	print (time.time() - lastTime)
 #	os.system("streamer -c /dev/video0 -b 32 -s 640x480 -o 7-eleven.jpeg")
 #	if (time.time() - lastTime) > 60:
 #		os.system("touch /home/slug/Projector/sevenElevenTouch")
-#		
+#
 #		# always take a picture as soon as the button is pressed
 #		# take a photo with the camera
-#		
-#		
+#
+#
 #		# rotate the image and draw a box around the button-presser
 #		os.system('convert 7-eleven.jpeg -rotate -90 -fill none -stroke red -strokewidth 5 -draw "rectangle 250,200,450,450" 7-eleven2.jpeg')
 #
 #		# Send an HTML email with an embedded image and a plain text message for
 #		# email clients that don't want to display the HTML.
 #
-#	
+#
 #
 #		# Define these once; use them twice!
 #		strFrom = '7-eleven@mit.edu'
@@ -97,9 +97,9 @@ def sevlev_mail():
 		"subject": "[7-eleven] Now, Goodale <eom>",
 		"from": "7-eleven@mit.edu",
 		"to": ["7-eleven@mit.edu"],
-		"body": '' }
-	
-	
+		"body": 'i don\'t like gmail filters' }
+
+
 	msg_raw = string.join((
 		"From: %s" % msg["from"],
 		"To: %s" % ', '.join(msg["to"]),
@@ -107,7 +107,7 @@ def sevlev_mail():
 		"",
 		msg["body"]
 		), "\r\n")
-	
+
 	server = smtplib.SMTP(msg["host"])
 	server.sendmail(msg["from"], msg["to"], msg_raw)
 	server.quit()
@@ -142,7 +142,7 @@ def main():
 		elif command == '711':
 			# file = open('/home/slug/Projector/log.log', 'w')
 			# file.write('711.check\n')
-			
+
 			l.flushInput()
 			l.write('7')
 			time.sleep(.5)
@@ -150,9 +150,11 @@ def main():
 				res = l.readline()
 				print res
 				if (res[0] == '7'):
-					sevlev_mail()
+					# sevlev_mail()
+                                        pass
                 if(command == '711-force'):
-                        sevlev_mail()
+                        # sevlev_mail()
+                        pass
 
 	if (COMMANDS.has_key(command)):
 		s = serial.Serial(port=port,baudrate=baudrate)
