@@ -95,10 +95,10 @@ def sevlev_mail():
 	msg = {
 		"host": "outgoing.mit.edu",
 		"subject": "[7-eleven] Now, Goodale <eom>",
-		"from": "7-eleven@mit.edu",
+		"from": "711-button@mit.edu",
 		"to": ["7-eleven@mit.edu"],
-		"body": 'i don\'t like gmail filters' }
-
+		"body": "",
+	}
 
 	msg_raw = string.join((
 		"From: %s" % msg["from"],
@@ -140,8 +140,8 @@ def main():
 		elif command == 'OFF' :
 			  l.write('0')
 		elif command == '711':
-			# file = open('/home/slug/Projector/log.log', 'w')
-			# file.write('711.check\n')
+			file = open('/home/slug/Projector/log.log', 'a')
+			file.write('711.check\n')
 
 			l.flushInput()
 			l.write('7')
@@ -149,12 +149,13 @@ def main():
 			if(l.inWaiting()):
 				res = l.readline()
 				print res
+				file.write('711.recv.{}\n'.format(res[0]))
+
 				if (res[0] == '7'):
-					# sevlev_mail()
-					pass
-				if (command == '711-force'):
-					# sevlev_mail()
-					pass
+					file.write('711.mail.sending\n')
+					sevlev_mail()
+		if (command == '711-force'):
+			sevlev_mail()
 
 	if (COMMANDS.has_key(command)):
 		s = serial.Serial(port=port,baudrate=baudrate)
