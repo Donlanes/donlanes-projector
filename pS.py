@@ -151,24 +151,24 @@ def main():
 		elif command == 'OFF' :
 			  l.write('0')
 		elif command == '711':
-			file = open('/home/slug/Projector/log.log', 'a')
-			file.write('711.check\n')
+			logfile = open('/home/slug/Projector/log.log', 'a')
+			logfile.write('711.check\n')
 
 			l.flushInput()
 			l.write('7')
 			time.sleep(.5)
 			if(l.inWaiting()):
 				res = l.readline()
-				file.write('711.recv.{}\n'.format(res[0]))
+				logfile.write('711.recv.{}\n'.format(res[0]))
 
 				if (res[0] == '7'):
 					SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
 					if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:
-						file.write('711.mail.sending\n')
+						logfile.write('711.mail.sending\n')
 						send_sevlev_mail()
 						save_last_email_sent_time()
 					else:
-						file.write('711.mail.ignoring\n')
+						logfile.write('711.mail.ignoring\n')
 		if (command == '711-force'):
 			send_sevlev_mail()
 
