@@ -41,11 +41,13 @@ PROJECTOR_COMMANDS = {
 	'ON_SCREEN_MUTE_OFF' : '\x02\x15\x00\x00\x00\x17'
 }
 
+class ProjectorNotConnected(Exception): pass
+
 class Projector(object):
 	def __init__(self):
 		port_list = path_filter("/dev/", "USB")
 		if not port_list:
-			no_projector_message()
+			raise ProjectorNotConnected()
 		elif len(port_list) != 1:
 			print "WARNING: Multiple potential projector ports detected. Choosing first."
 			print port_list
@@ -54,6 +56,10 @@ class Projector(object):
 			port = port_list[0]
 		BAUDRATE = 9600
 		self.serial = serial.Serial(port=port, baudrate=BAUDRATE)
+
+	def is_valid_cmd(self, command):
+		""" Whether a command is valid. """
+		return command in PROJECTOR_COMMANDS
 
 	def run_cmd(self, command):
 		"""
@@ -76,7 +82,7 @@ if __name__ == '__main__':
 	else:
 		command = raw_input("> ")
 
-	if command in PROJECTOR_COMMANDS:
+	if proj.is_valid_cmd(command):
 		proj.run_cmd(command)
 		print "Command sent."
 	else:

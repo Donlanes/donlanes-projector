@@ -11,8 +11,13 @@ Python Usage:
 	l.set_state(False) # turns lights off
 """
 
-import os, serial, sys
-from util import path_filter
+import os
+import serial
+import sys
+import time
+from util import path_filter, log_to_file
+
+class LightNotConnected(Exception): pass
 
 class Light(object):
 	"""
@@ -23,7 +28,7 @@ class Light(object):
 		light_controller_list = path_filter("/dev/", "ACM")
 		if len(light_controller_list)  != 1:
 			print "I don't know which light controller to open"
-			sys.exit(1)
+			raise LightNotConnected()
 		
 		light_controller = light_controller_list[0]
 		BAUDRATE = 9600
@@ -37,8 +42,26 @@ class Light(object):
 			False: '1',
 		}
 		self.serial.write(code[state])
-		self.serial.flushInput()
-		self.serial.close()
+
+	def sevlev(self):
+		"""
+		Query the light controller about some sevlevin.
+		Returns True if there is an unacknowledged 7.
+		Returns False if no pending 7 or no response.
+		"""
+		l = self.serial
+		l.flushInput()
+		l.write('7')
+		time.sleep(.5)
+		if(l.inWaiting()):
+			res = l.readline()
+			log_to_file('711.recv.{}\n'.format(res[0]))
+
+			seven_received = res[0] == '7'
+			log_to_file(seven_received)
+			return seven_received
+		else:
+			return False
 
 
 if __name__ == '__main__':

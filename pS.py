@@ -4,34 +4,11 @@ Possibly other things.
 """
 import serial, sys, re, os, argparse, time
 from Tkinter import *
-from datetime import datetime
-from util import path_filter
+from util import path_filter, log_to_file
+from projector import Projector, ProjectorNotConnected
+from light import Light, LightNotConnected
 
 ENABLE_SEVLEV_EMAIL = False
-
-# Projector RS232 control commands.
-# See this docunt: bottom of page 10, section 4 "list of commands"
-# http://www.necdisplay.com/documents/UserManuals/RS232_PJ_ControlCommands.pdf
-COMMANDS = {
-	# Projector power
-	'ON'                 : '\x02\x00\x00\x00\x00\x02',
-	'OFF'                : '\x02\x01\x00\x00\x00\x03',
-
-	# Project input selection
-	'RGB1'               : '\x02\x03\x00\x00\x02\x01\x01\x09',
-	'RGB2'               : '\x02\x03\x00\x00\x02\x01\x02\x0a',
-	'VIDEO'              : '\x02\x03\x00\x00\x02\x01\x06\x0e',
-	'SVIDEO'             : '\x02\x03\x00\x00\x02\x01\x0b\x13',
-	'DVI'                : '\x02\x03\x00\x00\x02\x01\x1a\x22',
-	'VIEWER'             : '\x02\x03\x00\x00\x02\x01\x1f\x27',
-
-	'PIC_MUTE_ON'        : '\x02\x10\x00\x00\x00\x12',
-	'PIC_MUTE_OFF'       : '\x02\x11\x00\x00\x00\x13',
-	'SOUND_MUTE_ON'      : '\x02\x12\x00\x00\x00\x14',
-	'SOUND_MUTE_OFF'     : '\x02\x13\x00\x00\x00\x15',
-	'ON_SCREEN_MUTE_ON'  : '\x02\x14\x00\x00\x00\x16',
-	'ON_SCREEN_MUTE_OFF' : '\x02\x15\x00\x00\x00\x17'
-}
 
 def send_sevlev_mail():
 	print "sending 711 email"
@@ -142,49 +119,44 @@ def save_last_email_sent_time():
 		f.write(str(int(time.time())))
 
 def main():
-	port_list = path_filter("/dev/", "USB")
-	if not port_list:
+	try:
+		projector = Projector()
+	except ProjectorNotConnected:
 		no_projector_message()
-	else:
-		port = port_list[0]
+		sys.exit(-1)
 
+	light = Light()
+
+	if len(sys.argv) <= 1:
+		print "Command required."
+		sys.exit(-1)
 	command = sys.argv[1]
-	baudrate = 9600
-	light_controller_list = path_filter("/dev/", "ACM")
-	if light_controller_list:
-		light_controller = light_controller_list[0]
-		l = serial.Serial(port=light_controller, baudrate=baudrate)
-		time.sleep(.5)
-		if command == 'ON' :
-			l.write('1')
-		elif command == 'OFF' :
-			l.write('0')
-		elif command == '711':
-			logfile = open('/home/slug/Projector/log.log', 'a')
-			logfile.write('711.check\n')
 
-			l.flushInput()
-			l.write('7')
-			time.sleep(.5)
-			if(l.inWaiting()):
-				res = l.readline()
-				logfile.write('711.recv.{}\n'.format(res[0]))
-				if not ENABLE_SEVLEV_EMAIL:
-					logfile.write('711.mail.disabled\n')
-				if (res[0] == '7') and ENABLE_SEVLEV_EMAIL:
-					SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
-					if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:
-						logfile.write('711.mail.sending\n')
-						send_sevlev_mail()
-						save_last_email_sent_time()
-					else:
-						logfile.write('711.mail.ignoring\n')
-		if (command == '711-force'):
-			send_sevlev_mail()
+	time.sleep(.5)
 
-	if (COMMANDS.has_key(command)):
-		s = serial.Serial(port=port,baudrate=baudrate)
-		s.write(COMMANDS[command])
+	# Control light.
+	if command == 'ON' :
+		light.set_state(False)
+	elif command == 'OFF' :
+		light.set_state(True)
+	elif command == '711':
+		if not ENABLE_SEVLEV_EMAIL:
+			log_to_file('711.mail.disabled\n')
+
+		if light.sevlev() and ENABLE_SEVLEV_EMAIL:
+			SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
+			if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:
+				log_to_file('711.mail.sending\n')
+				send_sevlev_mail()
+				save_last_email_sent_time()
+			else:
+				log_to_file('711.mail.ignoring\n')
+	elif (command == '711-force'):
+		send_sevlev_mail()
+
+	# Control projector.
+	if projector.is_valid_cmd(command):
+		projector.run_cmd(command)
 
 if __name__ == '__main__':
 	main()
