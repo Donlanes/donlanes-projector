@@ -19,6 +19,7 @@ from util import path_filter
 # Projector RS232 control commands.
 # See this docunt: bottom of page 10, section 4 "list of commands"
 # http://www.necdisplay.com/documents/UserManuals/RS232_PJ_ControlCommands.pdf
+# Also see nec-rs232-table.txt for a table of values extracted from that document.
 PROJECTOR_COMMANDS = {
 	# Projector power
 	'ON'                 : '\x02\x00\x00\x00\x00\x02',
