@@ -1,3 +1,7 @@
+"""
+Controls room lights and the lounge NEC projector
+Possibly other things.
+"""
 import serial, sys, re, os, argparse, time
 from Tkinter import *
 from datetime import datetime
@@ -22,9 +26,6 @@ COMMANDS = {
 	'ON_SCREEN_MUTE_ON':'\x02\x14\x00\x00\x00\x16',
 	'ON_SCREEN_MUTE_OFF':'\x02\x15\x00\x00\x00\x17'
 }
-
-
-
 
 def send_sevlev_mail():
 	print "sending 711 email"
@@ -119,7 +120,8 @@ def send_sevlev_mail():
 def no_projector_message():
 	root = Tk()
 	root.title('**PROJECTOR ALERT**')
-	Message(root, text="**ALERT** \n \n The USB cable to the projector may be unplugged or need to be reset.  Please unplug the 'BLUE' USB cable from the back of donlanes (This computer) and plug it back in.\n \n Thank you", bg='black',fg='white', relief=GROOVE).pack(padx=30, pady=10)
+	msg = "**ALERT** \n \n The USB cable to the projector may be unplugged or need to be reset.  Please unplug the 'BLUE' USB cable from the back of donlanes (This computer) and plug it back in.\n \n Thank you"
+	Message(root, text=msg, bg='black', fg='white', relief=GROOVE).pack(padx=30, pady=10)
 	root.mainloop()
 
 def get_last_email_sent_time():
@@ -127,14 +129,13 @@ def get_last_email_sent_time():
 		with open('last_sent_time', 'r') as f:
 			return int(f.read())
 	except IOError:
-	   return 0
+		return 0
 
 def save_last_email_sent_time():
 	with open('last_sent_time', 'w') as f:
 		f.write(str(int(time.time())))
 
 def main():
-	desc = "Control the lounge NEC projector"
 	port_list = path_filter("/dev/", "USB")
 	if not port_list:
 		no_projector_message()
@@ -149,9 +150,9 @@ def main():
 		l = serial.Serial(port=light_controller, baudrate=baudrate)
 		time.sleep(.5)
 		if command == 'ON' :
-				l.write('1')
+			l.write('1')
 		elif command == 'OFF' :
-			  l.write('0')
+			l.write('0')
 		elif command == '711':
 			logfile = open('/home/slug/Projector/log.log', 'a')
 			logfile.write('711.check\n')
@@ -162,10 +163,8 @@ def main():
 			if(l.inWaiting()):
 				res = l.readline()
 				logfile.write('711.recv.{}\n'.format(res[0]))
-
-                                if not ENABLE_SEVLEV_EMAIL:
-                                        logfile.write('711.mail.disabled\n')
-
+				if not ENABLE_SEVLEV_EMAIL:
+					logfile.write('711.mail.disabled\n')
 				if (res[0] == '7') and ENABLE_SEVLEV_EMAIL:
 					SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
 					if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:

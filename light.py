@@ -1,11 +1,10 @@
 import os, serial, sys
 from util import path_filter
 
-
-
 class Light(object):
-
-
+	"""
+	Controller for room lights.
+	"""
 	def __init__(self):
 		path = "/dev/"
 		light_controller_list = path_filter("/dev/", "ACM")
@@ -31,9 +30,8 @@ class Light(object):
 		l.close()
 
 
-
-
-
 if __name__ == '__main__':
+	# Example Usage:
 	l = Light()
-
+	l.state = False # turns lights off
+	l.state = True # turns lights on
