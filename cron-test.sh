@@ -1,2 +1,0 @@
-uptime > foo.bar
-
