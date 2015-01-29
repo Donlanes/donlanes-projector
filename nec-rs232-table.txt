@@ -1,0 +1,57 @@
+Table of command values
+For controlling our NEC projector over RS232
+Extracted from this document: bottom of page 10, section 4 "list of commands"
+http://www.necdisplay.com/documents/UserManuals/RS232_PJ_ControlCommands.pdf
+
+some number    command name                         example
+-----------    ------------                         -------
+006.           RUNNING SENSE                        00H 81H 00H 00H 00H 81H
+007.           COMMON DATA REQUEST                  00H C0H 00H 00H 00H C0H
+009.           ERROR STATUS REQUEST                 00H 88H 00H 00H 00H 88H
+015.           POWER ON                             02H 00H 00H 00H 00H 02H
+016.           POWER OFF                            02H 01H 00H 00H 00H 03H
+018.           INPUT SW CHANGE                      02H 03H 00H 00H 02H <DATA> CKS
+020.           PICTURE MUTE ON                      02H 10H 00H 00H 00H 12H
+021.           PICTURE MUTE OFF                     02H 11H 00H 00H 00H 13H
+022.           SOUND MUTE ON                        02H 12H 00H 00H 00H 14H
+023.           SOUND MUTE OFF                       02H 13H 00H 00H 00H 15H
+024.           ONSCREEN MUTE ON                     02H 14H 00H 00H 00H 16H
+025.           ONSCREEN MUTE OFF                    02H 15H 00H 00H 00H 17H
+030.           GAIN ADJUST                          03H 10H 00H 00H 05H <DATA> CKS
+030-2.         VOLUME ADJUST                        03H 10H 00H 00H 05H 05H <DATA> CKS
+030-12.        IMAGE MODE ADJUST                    03H 10H 00H 00H 05H <DATA> CKS
+037.           INFORMATION REQUEST                  03H 8AH 00H 00H 00H 8DH
+037-1.         LAMP INFORMATION REQUEST             03H 8CH 00H 00H 00H 8FH
+037-2.         LAMP INFORMATION REQUEST 2           03H 94H 00H 00H 00H 97H
+037-4.         LAMP INFORMATION REQUEST 3           03H 96H 00H 00H 02H <DATA> CKS
+037-6:         CARBON SAVINGS INFORMATION REQUEST   03H 9AH 00H 00H 01H <DATA> CKS
+037-7.         LAMP INFORMATION REQUEST 4           03H 9BH 00H 00H 03H <DATA> CKS
+038.           LAMP MODE REQUEST                    03H B0H 00H 00H 01H 07H BBH
+039.           LAMP MODE SET                        03H B1H 00H 00H 02H 07H 00H BDH
+046.           WXGA MODE SETTING REQUEST            03H B0H 00H 00H 01H DATA1 CKS
+049.           WXGA MODE SETTING SET                03H B1H 00H 00H 02H DATA1 DATA2 CKS
+050.           REMOTE KEY CODE                      02H 0FH 00H 00H 02H 00H 00H 13H
+053.           LENS CONTROL                         02H 18H 00H 00H 02H <DATA> CKS
+053-1.         LENS CONTROL REQUEST                 02H 1CH 00H 00H 02H <DATA> CKS
+053-2.         LENS CONTROL 2                       02H 1DH 00H 00H 04H <DATA> CKS
+053-3.         LENS MEMORY CUSTOM SET               02H 1EH 00H 00H 01H <DATA> CKS
+053-4.         LENS MEMORY REFERENCE SET            02H 1FH 00H 00H 01H <DATA> CKS
+053-5.         LENS MEMORY CONTROL REQUEST          02H 20H 00H 00H 01H <DATA> CKS
+053-6.         LENS MEMORY CONTROL                  02H 21H 00H 00H 02H <DATA> CKS
+053-7.         LENS INFORMATION REQUEST             02H 22H 00H 00H 01H <DATA> CKS
+060.           GAIN PARAMETER REQUEST 2             03H 04H 00H 00H 03H <DATA> CKS
+077.           MUTE CONTROL                         02H 1AH 00H 00H 02H <DATA> CKS
+078-1.         SETTING REQUEST                      00H 85H 00H 00H 01H 00H CKS
+078-2.         RUNNING STATUS REQUEST               00H 85H 00H 00H 01H 01H CKS
+078-3.         INPUT STATUS REQUEST                 00H 85H 00H 00H 01H 02H CKS
+078-4.         MUTE STATUS REQUEST                  00H 85H 00H 00H 01H 03H CKS
+078-5.         MODEL NAME REQUEST                   00H 85H 00H 00H 01H 04H CKS
+078-6.         MIRROR COVER STATUS REQUEST          00H 85H 00H 00H 01H 05H CKS
+079.           FREEZE CONROL                        01H 98H 00H 00H 01H DATA01 CKS
+097-198.       PIP/SIDE BY SIDE REQUEST             03H B0H 00H 00H 02H C5H DATA CKS
+098-196.       WXGA MODE SETTING SET                03H B1H 00H 00H 02H DATA1 DATA2 CKS
+098-198.       PIP/SIDE BY SIDE SET                 03H B1H 00H 00H 03H C5H <DATA> CKS
+110.           AUTO FUNCTIONS EXECUTE               03H B6H 00H 00H 01H <DATA> CKS
+111.           AUTO ADJUST EXECUTE2                 03H BAH 00H 00H 01H <DATA> CKS
+305-1.         BASE MODEL TYPE REQUEST              00H BFH 00H 00H 01H <DATA> CKS
+305-3.         PROJECTOR INFORMATION REQUEST        00H BFH 00H 00H 01H <DATA> CKS
