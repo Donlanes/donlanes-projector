@@ -3,6 +3,8 @@ from Tkinter import *
 from datetime import datetime
 from util import path_filter
 
+ENABLE_SEVLEV_EMAIL = False
+
 COMMANDS = {
 	'ON': '\x02\x00\x00\x00\x00\x02',
 	'OFF': '\x02\x01\x00\x00\x00\x03',
@@ -135,7 +137,7 @@ def main():
 	desc = "Control the lounge NEC projector"
 	port_list = path_filter("/dev/", "USB")
 	if not port_list:
-		projector_message()
+		no_projector_message()
 	else:
 		port = port_list[0]
 
@@ -161,7 +163,10 @@ def main():
 				res = l.readline()
 				logfile.write('711.recv.{}\n'.format(res[0]))
 
-				if (res[0] == '7'):
+                                if not ENABLE_SEVLEV_EMAIL:
+                                        logfile.write('711.mail.disabled\n')
+
+				if (res[0] == '7') and ENABLE_SEVLEV_EMAIL:
 					SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
 					if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:
 						logfile.write('711.mail.sending\n')
