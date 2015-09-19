@@ -7,9 +7,13 @@ from Tkinter import *
 from util import path_filter, log_to_file
 from projector import Projector, ProjectorNotConnected
 from light import Light, LightNotConnected
+import slugwikiutils
 
 ENABLE_SEVLEV_EMAIL = True
-
+try:
+    slugwiki=slugwikiutils.SlugWikiUtils()
+except:
+    pass
 def send_sevlev_mail():
 	print "sending 711 email"
 	import smtplib, string, time
@@ -79,13 +83,16 @@ def send_sevlev_mail():
 #		 "subject": "[7-eleven] Now, Goodale (" + str(int(time.mktime(time.gmtime()))) + ") <eom>",
 
 	time_str = time.strftime("%Y-%m-%d %I:%M %p", time.localtime())
-
+    try:
+        quote=slugwikiutils.getRandomQuote()+ "\n\n" + "To add quotes, edit the page: http://slugwiki.mit.edu/index.php?title=Slug_Quotes"
+    except:
+        quote = ""
 	msg = {
 		"host": "outgoing.mit.edu",
 		"subject": "[7-eleven] Sevlev! Leaving from Goodale",
 		"from": "711-button@mit.edu",
 		"to": ["7-eleven@mit.edu"],
-		"body": time_str + "\nAdd or remove yourself: https://groups.mit.edu/webmoira/list/7-eleven",
+        "body": time_str + "\n" + quote[0]+ "\n" +quote[1]+ "\nAdd or remove yourself: https://groups.mit.edu/webmoira/list/7-eleven",
 	}
 
 	msg_raw = string.join((
