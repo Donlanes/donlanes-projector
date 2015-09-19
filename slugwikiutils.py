@@ -5,9 +5,14 @@ import random
 class SlugWikiUtils:
     url = "slugwiki.mit.edu"
     quotesPage='Slug_Quotes'
+    username="button711"
+    password=""
+    page711="711_button"
     def __init__(self):
         useragent = 'YourBot, based on mwclient v0.7.2. Run by User: Ivan ivanaf@mit.edu'
         self.site = mwclient.Site(('http', self.url), clients_useragent=useragent, path ='/')
+        if self.password!="":
+            self.site.login(self.username, self.password)
     def getRandomQuote(self):
         page = self.site.Pages[self.quotesPage]
         pageText=page.text()
@@ -44,3 +49,8 @@ class SlugWikiUtils:
     def getQuotesText(self):
         page = self.site.Pages[self.quotesPage]
         return page.text()
+    def addTo711(self, text):
+        page = self.site.Pages[self.page711]
+        pageText=page.text()
+        page.save(pageText + u'<br>' + text, summary = '711')
+

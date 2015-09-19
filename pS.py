@@ -85,9 +85,13 @@ def send_sevlev_mail():
     time_str = time.strftime("%Y-%m-%d %I:%M %p", time.localtime())
     try:
         quote=slugwiki.getRandomQuote();
-        quoteText= quote[0]+ "\n" +quote[1]+ "\n\n" + "To add quotes, edit the page: http://slugwiki.mit.edu/index.php?title=Slug_Quotes"
+        quoteText= quote[0]+ "\n" +quote[1]+ "\n\n" + "To add quotes, edit the page: http://slugwiki.mit.edu/index.php?title=Slug_Quotes \n\n Logged to: http://slugwiki.mit.edu/index.php?title=711_button"
     except:
             quoteText = ""
+    try:
+        slugwiki.addTo711("7-11 at: " +time_str)
+    except:
+        pass
     msg = {
         "host": "outgoing.mit.edu",
         "subject": "[7-eleven] Sevlev! Leaving from Goodale",
@@ -95,7 +99,6 @@ def send_sevlev_mail():
         "to": ["7-eleven@mit.edu"],
         "body": time_str + "\n" + quoteText+ "\nAdd or remove yourself: https://groups.mit.edu/webmoira/list/7-eleven",
     }
-    print quoteText
     msg_raw = string.join((
         "From: %s" % msg["from"],
         "To: %s" % ', '.join(msg["to"]),
