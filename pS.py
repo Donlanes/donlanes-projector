@@ -8,7 +8,7 @@ from util import path_filter, log_to_file
 from projector import Projector, ProjectorNotConnected
 from light import Light, LightNotConnected
 
-ENABLE_SEVLEV_EMAIL = False
+ENABLE_SEVLEV_EMAIL = True
 
 def send_sevlev_mail():
 	print "sending 711 email"
@@ -144,7 +144,7 @@ def main():
 			log_to_file('711.mail.disabled\n')
 
 		if light.sevlev() and ENABLE_SEVLEV_EMAIL:
-			SEVLEV_EMAIL_INTERVAL = 30*60 # 30 minutes
+			SEVLEV_EMAIL_INTERVAL = 5*60 # 30 minutes
 			if int(time.time()) - get_last_email_sent_time() > SEVLEV_EMAIL_INTERVAL:
 				log_to_file('711.mail.sending\n')
 				send_sevlev_mail()
